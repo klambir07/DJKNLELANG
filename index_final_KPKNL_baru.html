@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lelang Internal KPKNL</title>
+<style>
+:root{
+  --green:#1E8449;
+  --green-dark:#145A32;
+  --muted:#d0d7de;
+  --bg:#f5f7f5;
+  --card:#ffffff;
+  --text:#1b1b1b;
+  --blue-dark:#0b3b6f; /* biru tua resmi */
+}
+*{box-sizing:border-box}
+body{font-family: 'Segoe UI', Arial, sans-serif;margin:0;background:var(--bg);color:var(--text);}
+header{background:var(--card);display:flex;align-items:center;gap:16px;justify-content:center;padding:18px;border-bottom:1px solid rgba(0,0,0,0.04)}
+header img{height:60px}
+.header-text{text-align:center}
+.header-text h1{margin:0;font-size:18px;color:var(--green-dark)}
+.header-text p{margin:2px 0 0;font-size:13px;color:#555}
+main{padding:28px 16px}
+.container{max-width:1120px;margin:0 auto}
+.katalog-container{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:18px;margin-bottom:8px}
+.katalog-item{background:var(--card);border-radius:10px;border:1px solid var(--muted);padding:18px;text-align:center;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.04)}
+.katalog-item i{font-size:32px;color:var(--green);display:block;margin-bottom:8px}
+.katalog-item span{font-weight:700;color:var(--green-dark);font-size:14px}
+.judul-kategori{display:none;text-align:center;color:var(--green-dark);font-weight:700;margin:22px 0;font-size:20px}
+.produk-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin-bottom:40px}
+.produk-card{background:var(--card);border:1px solid var(--muted);border-radius:10px;overflow:hidden;display:flex;flex-direction:column;min-height:320px}
+.produk-card img{width:100%;height:160px;object-fit:cover}
+.produk-body{padding:12px;flex:1;display:flex;flex-direction:column;align-items:center}
+.nama{font-weight:700;color:var(--green-dark);text-align:center;margin-bottom:6px}
+.desc{font-size:13px;color:#555;text-align:center;margin-bottom:6px}
+.harga{color:var(--green);font-weight:700;margin-bottom:10px}
+.btn-green{display:block;background:var(--green);color:#fff;text-decoration:none;text-align:center;padding:10px;font-weight:600;border-radius:0 0 10px 10px}
+.btn-green:active{transform:translateY(1px)}
+.footer{background:var(--blue-dark);color:#fff;padding:18px;text-align:center;font-size:14px}
+.note{max-width:1120px;margin:12px auto 30px;padding:8px 12px;color:#555;font-size:13px}
+@media (max-width:520px){header img{height:48px}.nama{font-size:14px}.harga{font-size:14px}} 
+</style>
+</head>
+<body>
+<header>
+  <img src="https://djkn.kemenkeu.go.id/images/logo-djkn.png" alt="Logo DJKN">
+  <div class="header-text">
+    <h1>Direktorat Jenderal Kekayaan Negara</h1>
+    <p>Kantor Pelayanan Kekayaan Negara dan Lelang (KPKNL)</p>
+  </div>
+</header>
+<main>
+  <div class="container">
+    <div class="note">Pilih kategori di bawah untuk melihat daftar produk. Tombol <strong>Beli Sekarang</strong> akan membuka WhatsApp penjual.</div>
+    <div class="katalog-container" id="katalogList"></div>
+    <div id="judul" class="judul-kategori"></div>
+    <div id="produkArea"></div>
+  </div>
+</main>
+<footer class="footer">© 2025 KPKNL – Direktorat Jenderal Kekayaan Negara, Kementerian Keuangan Republik Indonesia</footer>
+
+<script>
+const catalog = [
+  {id:'logam', label:'Logam Mulia Antam', icon:'💰'},
+  {id:'mobil', label:'Mobil', icon:'🚗'},
+  {id:'tas', label:'Tas Branded', icon:'👜'},
+  {id:'jam', label:'Jam Tangan', icon:'⌚'}
+];
+
+const products = {
+  logam: [
+    {name:'Logam Mulia Antam 1000 Gram', desc:'Emas batangan Antam 1000 gram', price:'Rp 1.700.000.000', img:'images/gold1000.png', wa:'0817581254'},
+    {name:'Logam Mulia Antam 500 Gram', desc:'Emas batangan Antam 500 gram', price:'Rp 850.000.000', img:'images/gold500.png', wa:'0817581254'},
+    {name:'Logam Mulia Antam 250 Gram', desc:'Emas batangan Antam 250 gram', price:'Rp 425.000.000', img:'images/gold250.png', wa:'0817581254'},
+    {name:'Logam Mulia Antam 100 Gram', desc:'Emas batangan Antam 100 gram', price:'Rp 170.000.000', img:'images/gold100.png', wa:'0817581254'},
+    {name:'Logam Mulia Antam 50 Gram', desc:'Emas batangan Antam 50 gram', price:'Rp 85.000.000', img:'images/gold50.png', wa:'0817581254'},
+    {name:'Logam Mulia Antam 25 Gram', desc:'Emas batangan Antam 25 gram', price:'Rp 42.500.000', img:'images/gold25.png', wa:'0817581254'},
+    {name:'Logam Mulia Antam 10 Gram', desc:'Emas batangan Antam 10 gram', price:'Rp 17.000.000', img:'images/gold10.png', wa:'0817581254'}
+  ],
+  mobil: [
+    {name:'Toyota Land Cruiser 2025 3.3 GR-S', desc:'Automatic', price:'Rp 1.500.000.000', img:'images/landcruiser.png', wa:'0817581254'},
+    {name:'Toyota Voxy 2025 2.0 Van Wagon', desc:'Automatic', price:'Rp 320.000.000', img:'images/voxy.png', wa:'0817581254'},
+    {name:'Kijang Innova Zenix 2025 2.0 Q HV CVT TSS', desc:'Automatic', price:'Rp 370.000.000', img:'images/kijang_innova_zenix.png', wa:'0817581254'},
+    {name:'Honda Accord 2025 1.5 Sedan', desc:'Automatic', price:'Rp 430.000.000', img:'images/honda_accord.png', wa:'0817581254'},
+    {name:'Honda BR-V 2025 1.5 Prestige SUV', desc:'Automatic', price:'Rp 192.000.000', img:'images/honda_brv.png', wa:'0817581254'},
+    {name:'Honda Civic 2025 1.5 RS Sedan', desc:'Automatic', price:'Rp 360.000.000', img:'images/honda_civic.png', wa:'0817581254'},
+    {name:'Mercedes-Benz A35 2025 AMG 2.0', desc:'Automatic', price:'Rp 550.000.000', img:'images/mercedes_a35.png', wa:'0817581254'},
+    {name:'Mercedes-Benz A45 2025 AMG 4MATIC+ Hatchback', desc:'Automatic', price:'Rp 750.000.000', img:'images/mercedes_a45.png', wa:'0817581254'},
+    {name:'Mercedes-Benz A200 2025 Progressive Line', desc:'Automatic', price:'Rp 420.000.000', img:'images/mercedes_a200.png', wa:'0817581254'},
+    {name:'BMW X3 2.0 Drive20i xLine SUV 2025', desc:'Automatic', price:'Rp 600.000.000', img:'images/bmw_x3.png', wa:'0817581254'},
+    {name:'Pajero Sport 2025 2.4 DAKAR SUV', desc:'Automatic', price:'Rp 250.000.000', img:'images/pajero_sport.png', wa:'0817581254'},
+    {name:'Xpander Cross 2025 1.5 Cross Wagon', desc:'Automatic', price:'Rp 170.000.000', img:'images/xpander_cross.png', wa:'0817581254'},
+    {name:'Mazda CX-5 2025 2.5 AWD SUV', desc:'Automatic', price:'Rp 370.000.000', img:'images/mazda_cx5.png', wa:'0817581254'},
+    {name:'Mazda CX-30 Grand Touring 2025 Wagon RST', desc:'Automatic', price:'Rp -', img:'images/mazda_cx30.png', wa:'0817581254'}
+  ],
+  tas: [
+    {name:'Hermès Lindy 26 Beige Marfa', desc:'Hermès', price:'Rp 106.000.000', img:'https://via.placeholder.com/600x400?text=Hermes+Lindy+26', wa:'0817581254'},
+    {name:'Hermès Birkin 25 Mauve Sylvestre', desc:'Hermès', price:'Rp 220.000.000', img:'https://via.placeholder.com/600x400?text=Hermes+Birkin+25', wa:'0817581254'},
+    {name:'Hermès Kelly 25 Vert Biscuit / Blanc Madame', desc:'Hermès', price:'Rp 217.000.000', img:'https://via.placeholder.com/600x400?text=Hermes+Kelly+25', wa:'0817581254'},
+    {name:'LOUIS VUITTON OnTheGo Organizer M15136', desc:'Louis Vuitton', price:'Rp 43.500.000', img:'https://via.placeholder.com/600x400?text=LV+OnTheGo', wa:'0817581254'},
+    {name:'LOUIS VUITTON Side Trunk MM Monogram', desc:'Louis Vuitton', price:'Rp 41.700.000', img:'https://via.placeholder.com/600x400?text=LV+Side+Trunk', wa:'0817581254'},
+    {name:'LOUIS VUITTON Vanity Chain Pouch M27049', desc:'Louis Vuitton', price:'Rp 35.000.000', img:'https://via.placeholder.com/600x400?text=LV+Vanity+Chain', wa:'0817581254'}
+  ],
+  jam: [
+    {name:'ROLEX Day-Date 40', desc:'Oyster, 40 mm, emas Everose — Ref 228235', price:'Rp 489.000.000', img:'images/rolex_daydate40.png', wa:'0817581254'},
+    {name:'ROLEX 1908', desc:'39 mm, emas kuning 18 karat — Ref 52508', price:'Rp 369.000.000', img:'images/rolex_1908.png', wa:'0817581254'},
+    {name:'ROLEX Lady-Datejust', desc:'Oyster, 28 mm, Oystersteel, emas putih & berlian — Ref 279384RBR', price:'Rp 178.000.000', img:'images/rolex_ladydatejust.png', wa:'0817581254'},
+    {name:'PATEK PHILIPPE Calatrava 6007G-001', desc:'Black Dial', price:'Rp 285.000.000', img:'images/patek_calatrava.png', wa:'0817581254'},
+    {name:'PATEK PHILIPPE Golden Ellipse 5738R-001', desc:'Black Dial', price:'Rp 306.000.000', img:'images/patek_goldenellipse.png', wa:'0817581254'},
+    {name:'PATEK PHILIPPE Twenty~4 7300/1200A-001', desc:'Blue Dial', price:'Rp 240.000.000', img:'images/patek_twenty4.png', wa:'0817581254'},
+    {name:'CARTIER Baignoire WB520008', desc:'Silver', price:'Rp 240.000.000', img:'images/cartier_baignoire.png', wa:'0817581254'},
+    {name:'CARTIER Santos De Skeleton WHSA0012', desc:'Automatic', price:'Rp 217.000.000', img:'images/cartier_santos.png', wa:'0817581254'}
+  ]
+};
+
+// render katalog
+const katalogList = document.getElementById('katalogList');
+catalog.forEach(cat=>{
+  const el=document.createElement('div');
+  el.className='katalog-item';
+  el.innerHTML=`<i>${cat.icon}</i><span>${cat.label}</span>`;
+  el.addEventListener('click',()=>showProducts(cat.id));
+  katalogList.appendChild(el);
+});
+
+function showProducts(id){
+  const produkArea=document.getElementById('produkArea');
+  produkArea.innerHTML='';
+  const title=document.getElementById('judul');
+  title.style.display='block';
+  title.innerText='Produk '+catalog.find(c=>c.id===id).label;
+  const items=products[id]||[];
+  const grid=document.createElement('div');
+  grid.className='produk-grid';
+  if(items.length===0){
+    grid.innerHTML=`<p style="text-align:center;color:#777">Belum ada produk di kategori ini.</p>`;
+  } else {
+    items.forEach(p=>{
+      const card=document.createElement('div');
+      card.className='produk-card';
+      card.innerHTML=`
+        <img src="${p.img}" alt="${p.name}">
+        <div class="produk-body">
+          <div class="nama">${p.name}</div>
+          <div class="desc">${p.desc}</div>
+          <div class="harga">${p.price}</div>
+        </div>
+        <a class="btn-green" href="https://wa.me/${p.wa}?text=Halo,%20saya%20tertarik%20dengan%20${encodeURIComponent(p.name)}" target="_blank">💬 Beli Sekarang</a>
+      `;
+      grid.appendChild(card);
+    });
+  }
+  produkArea.appendChild(grid);
+  // scroll to produk
+  window.scrollTo({top: document.getElementById('judul').offsetTop - 20, behavior:'smooth'});
+}
+</script>
+</body>
+</html>
